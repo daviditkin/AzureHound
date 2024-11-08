@@ -7,6 +7,13 @@ azurehound
 
 *.json*
 
+
+################
+# Azure deployment scripts 
+################################
+
+!deploy/*.json*
+
 ################
 # Boilerplate Settings (modify as needed)
 # (https://github.com/github/gitignore)
