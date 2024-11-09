@@ -37,6 +37,61 @@
         "description": "Port to open on the container and the public IP address."
       }
     },
+    "azurehoundTenant": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "The directory (tenant) that you want to request permission from."
+      }
+    },
+    "azurehoundApp": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "The Application (client) Id that the Azure app registration portal assigned when the app was registered."
+      }
+    },
+    "azurehoundCertValue": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "The contents of the cert uploaded to the app registration portal."
+      }
+    },
+    "azurehoundKeyValue": {
+      "type": "string",
+      "metadata": {
+        "description": "The contents of the key file for a certificate uploaded to the app registration portal."
+      }
+    },
+    "azurehoundKeypass": {
+      "type": "securestring",
+      "defaultValue": "",
+      "metadata": {
+        "description": "The key pass for the certificate if used."
+      }
+    },
+    "azurehoundInstance": {
+      "type": "string",
+      "defaultValue": "https://demo.bloodhoundenterprise.io",
+      "metadata": {
+        "description": "The BloodHound Enterprise instance URL."
+      }
+    },
+    "azurehoundTokenId": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "The BloodHound Enterprise token ID."
+      }
+    },
+    "azurehoundToken": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "The BloodHound Enterprise token."
+      }
+    },
     "cpuCores": {
       "type": "int",
       "defaultValue": 1,
@@ -82,6 +137,58 @@
                   "protocol": "TCP"
                 }
               ],
+              "command": [
+                "list"
+              ],
+              "volumeMounts": [
+                {
+                  "name": "config-volume",
+                  "mountPath": "/etc/azurehound"
+                }
+              ],
+              "environmentVariables": [
+                {
+                  "name": "AZUREHOUND_TENANT",
+                  "value": "[parameters('azurehoundTenant')]"
+                },
+                {
+                  "name": "AZUREHOUND_APP",
+                  "value": "[parameters('azurehoundApp')]"
+                },
+                {
+                  "name": "AZUREHOUND_CERT",
+                  "value": "/etc/azurehound/tls.cert"
+                },
+                {
+                  "name": "AZUREHOUND_KEY",
+                  "value": "/etc/azurehound/tls.key"
+                },
+                {
+                  "name": "AZUREHOUND_KEYPASS",
+                  "value": "[parameters('azurehoundKeypass')]"
+                },
+                {
+                  "name": "AZUREHOUND_INSTANCE",
+                  "value": "[parameters('azurehoundInstance')]"
+                },
+                {
+                  "name": "AZUREHOUND_TOKENID",
+                  "secureValue": "[parameters('azurehoundTokenId')]"
+                },
+                {
+                  "name": "AZUREHOUND_TOKEN",
+                  "secureValue": "[parameters('azurehoundToken')]"
+                },
+                {
+                  "name": "AZUREHOUND_JSON",
+                  "name": "AZUREHOUND_JSON",
+                  "value": true
+                },
+                {
+                  "name": "AZUREHOUND_VERBOSITY",
+                  "value": 0
+                }
+              ],
               "resources": {
                 "requests": {
                   "cpu": "[parameters('cpuCores')]",
@@ -101,7 +208,16 @@
               "protocol": "TCP"
             }
           ]
-        }
+        },
+        "volumes": [
+          {
+            "name": "config-volume",
+            "secret": {
+              "tls.key": "[parameters('azurehoundKeyValue')]",
+              "tls.cert": "[parameters('azurehoundCertValue')]"
+            }
+          }
+        ]
       }
     }
   ],
