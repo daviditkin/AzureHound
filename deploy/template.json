@@ -45,28 +45,25 @@
       }
     },
     "azurehoundApp": {
-      "type": "string",
-      "defaultValue": "",
+      "type": "securestring",
       "metadata": {
         "description": "The Application (client) Id that the Azure app registration portal assigned when the app was registered."
       }
     },
     "azurehoundCertValue": {
-      "type": "string",
-      "defaultValue": "",
+      "type": "securestring",
       "metadata": {
         "description": "The contents of the cert uploaded to the app registration portal."
       }
     },
     "azurehoundKeyValue": {
-      "type": "string",
+      "type": "securestring",
       "metadata": {
         "description": "The contents of the key file for a certificate uploaded to the app registration portal."
       }
     },
     "azurehoundKeypass": {
       "type": "securestring",
-      "defaultValue": "",
       "metadata": {
         "description": "The key pass for the certificate if used."
       }
@@ -79,15 +76,13 @@
       }
     },
     "azurehoundTokenId": {
-      "type": "string",
-      "defaultValue": "",
+      "type": "securestring",
       "metadata": {
         "description": "The BloodHound Enterprise token ID."
       }
     },
     "azurehoundToken": {
-      "type": "string",
-      "defaultValue": "",
+      "type": "securestring",
       "metadata": {
         "description": "The BloodHound Enterprise token."
       }
@@ -138,6 +133,7 @@
                 }
               ],
               "command": [
+                "/azurehound",
                 "list"
               ],
               "volumeMounts": [
@@ -181,7 +177,6 @@
                 },
                 {
                   "name": "AZUREHOUND_JSON",
-                  "name": "AZUREHOUND_JSON",
                   "value": true
                 },
                 {
@@ -200,15 +195,6 @@
         ],
         "osType": "Linux",
         "restartPolicy": "[parameters('restartPolicy')]",
-        "ipAddress": {
-          "type": "Public",
-          "ports": [
-            {
-              "port": "[parameters('port')]",
-              "protocol": "TCP"
-            }
-          ]
-        },
         "volumes": [
           {
             "name": "config-volume",
@@ -233,10 +219,6 @@
     "resourceId": {
       "type": "string",
       "value": "[resourceId('Microsoft.ContainerInstance/containerGroups', parameters('name'))]"
-    },
-    "containerIPv4Address": {
-      "type": "string",
-      "value": "[reference(resourceId('Microsoft.ContainerInstance/containerGroups', parameters('name')), '2023-05-01').ipAddress.ip]"
     },
     "location": {
       "type": "string",
